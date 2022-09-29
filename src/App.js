@@ -3,13 +3,33 @@ import Quote from './Component/Quote';
 
 function App() {
 
-  return (
+  const [quote, setQuote] = useState({
+    anime: null,
+    character: null,
+    quote: null
+  });
 
+  const generate = async () => {
+    setQuote(await fetchQuote());
+  }
+
+  const fetchQuote = async () => {
+    return await fetch('https://animechan.vercel.app/api/random')
+      .then(response => response.json());
+  }
+
+  console.log(fetchQuote())
+
+  useEffect(() => {
+    setQuote(fetchQuote());
+  }, []);
+
+  return (
     <div className="App">
 
-      <Quote />
+      <Quote quote={quote} />
 
-      <button>New Quote</button>
+      <button onClick={generate} >New Quote</button>
 
     </div>
   );
